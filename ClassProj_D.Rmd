@@ -1,0 +1,26 @@
+---
+title: "Class Project Draft"
+author: "Anonymous"
+date: "11/17/2024"
+output: html_notebook
+---
+
+# Research Question
+**"How have land temperatures changed over the past century across different countries, and what trends can we observe in global warming?"**
+
+---
+
+## Data Sources
+
+**Primary Data Source:**  
+- Dataset: *GlobalLandTemperaturesByCountry.csv*  
+- Source: Kaggle, curated by Berkeley Earth.  
+- Description: Historical land temperature records for countries worldwide. Each record contains the date, temperature, and country.  
+
+**Secondary Data Source:**  
+- Dataset: Meteorological data from the `climate` R package.  
+- Description: Provides environmental variables like CO2 levels, precipitation, and temperature, adding complementary insights.
+
+---
+
+
