@@ -22,5 +22,59 @@ output: html_notebook
 - Description: Provides environmental variables like CO2 levels, precipitation, and temperature, adding complementary insights.
 
 ---
+## Data Access and Inspection
+
+### Importing Data
+```{r setup, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+# Load primary dataset
+temperature_data <- read_csv("/Users/vishallilani/Desktop/STAT 184/archive/GlobalLandTemperaturesByCountry.csv")
+
+# Glimpse of the data
+glimpse(temperature_data)
+
+# Summary statistics
+summary(temperature_data)
+```
+
+###Cleaning and Filtering
+```{r}
+recent_data <- temperature_data %>%
+  filter(as.Date(dt) >= as.Date("1924-01-01"))
+
+# Summary statistics for recent data
+summary_stats <- recent_data %>%
+  group_by(Country) %>%
+  summarize(
+    mean_temp = mean(AverageTemperature, na.rm = TRUE),
+    max_temp = max(AverageTemperature, na.rm = TRUE),
+    min_temp = min(AverageTemperature, na.rm = TRUE)
+  )
+summary_stats
+
+```
+
+###Exploring Global Trends
+```{r}
+sample_data <- temperature_data %>%
+  sample_n(1000)
+
+# Line graph showing temperature trends
+ggplot(sample_data, aes(x = as.Date(dt), y = AverageTemperature)) +
+  geom_line(alpha = 0.5, color = "blue") +
+  labs(
+    title = "Average Temperature Trends (Sampled Data)",
+    x = "Date",
+    y = "Average Temperature (°C)"
+  ) +
+  theme_minimal()
+
+```
+
+This graph shows fluctuating average temperatures over the years, with a notable increase in variability and values in recent decades, reflecting potential global warming trends.
+
 
 
