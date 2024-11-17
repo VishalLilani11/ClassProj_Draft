@@ -77,4 +77,83 @@ ggplot(sample_data, aes(x = as.Date(dt), y = AverageTemperature)) +
 This graph shows fluctuating average temperatures over the years, with a notable increase in variability and values in recent decades, reflecting potential global warming trends.
 
 
+###Comparing Regional Trends
+```{r}
+regional_trends <- recent_data %>%
+  mutate(Region = case_when(
+    Country %in% c("India", "China", "Japan") ~ "Asia",
+    Country %in% c("United States", "Canada") ~ "North America",
+    TRUE ~ "Other"
+  )) %>%
+  group_by(Region, dt) %>%
+  summarize(mean_temp = mean(AverageTemperature, na.rm = TRUE))
+
+# Visualization
+ggplot(regional_trends, aes(x = as.Date(dt), y = mean_temp, color = Region)) +
+  geom_line() +
+  labs(
+    title = "Temperature Trends by Region",
+    x = "Date",
+    y = "Mean Temperature (°C)",
+    color = "Region"
+  ) +
+  theme_minimal()
+```
+
+This graph illustrates that different regions experience varied temperature trends. While Asia and North America show a consistent upward trend, the "Other" regions exhibit more variability.
+
+
+
+###Global Temperature Distribution
+```{r}
+
+ggplot(recent_data, aes(x = Country, y = AverageTemperature)) +
+  geom_boxplot() +
+  labs(
+    title = "Distribution of Average Temperatures by Country",
+    x = "Country",
+    y = "Average Temperature (°C)"
+  ) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+The boxplot indicates a wide distribution of temperatures across countries, with some outliers showing extremely high or low average temperatures, emphasizing the diversity of climatic conditions globally.
+
+
+###CO2 Levels vs. Temperature
+```{r}
+
+library(dplyr)
+library(ggplot2)
+library(lubridate)  
+
+
+library(climate)
+data("co2_demo", package = "climate")  
+
+
+recent_data <- recent_data %>%
+  mutate(Year = year(as.Date(dt)))  
+
+
+co2_demo <- co2_demo %>%
+  rename(Year = yy)
+
+# Merge the datasets 
+merged_data <- inner_join(recent_data, co2_demo, by = "Year")
+
+# Create plot: CO2 levels vs. Land Temperature
+ggplot(merged_data, aes(x = co2_avg, y = AverageTemperature)) +
+  geom_point(alpha = 0.5, color = "blue") + 
+  geom_smooth(method = "lm", color = "red") +  
+  labs(
+    title = "CO2 Levels vs. Land Temperature",
+    x = "CO2 Levels (ppm)",
+    y = "Average Land Temperature (°C)"
+  ) +
+  theme_minimal()
+```
+
+This scatter plot with a regression line highlights a positive relationship between CO2 levels and average land temperatures, supporting the theory that increased CO2 levels are associated with global warming.
+
 
